@@ -1,6 +1,7 @@
 SRC_DIR = src
 INCLUDE_DIR = inc
 EXECUTABLE_NAME=make_template 
+BUILD_DIR := build 
 
 CC=gcc 
 CXX=g++
@@ -12,11 +13,11 @@ LDFLAGS = -lmath
 DEBUG = 1
 
 ifeq ($(DEBUG), 1)
-  BUILD_DIR = build/debug
+  OUT_DIR := $(addsuffix /debug,$(BUILD_DIR))
   CFLAGS +=-g -o0 
   CXXFLAGS += -o3 
 else
-  BUILD_DIR = build/release
+  OUT_DIR := $(addsuffix /release,$(BUILD_DIR))
   CFLAGS += -o3 
   CXXFLAGS += -o3 
 endif
@@ -27,27 +28,42 @@ SRC = $(wildcard  $(SRC_DIR)/*.c   $(SRC_DIR)/*/*.c   $(SRC_DIR)/*/*/*.c   $(SRC
 VPATH = $(sort $(dir $(SRC)))
 
 TARGET_SRC = $(notdir $(SRC))
-TARGET_OBJ = $(TARGET_SRC:%.c=$(BUILD_DIR)/%.o)
+TARGET_OBJ_ALL = $(TARGET_SRC:%.c=$(OUT_DIR)/%.o)
 
 
-all: $(BUILD_DIR) $(BUILD_DIR)/$(EXECUTABLE_NAME)
+all : $(OUT_DIR) build
 
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+build : $(OUT_DIR)/$(EXECUTABLE_NAME)
 
-$(BUILD_DIR)/$(EXECUTABLE_NAME): $(TARGET_OBJ)
-	echo $(VPATH)
-	echo $(TARGET_SRC)
-	echo $(TARGET_OBJ)
+$(OUT_DIR):
+	@mkdir -p $(OUT_DIR)
+ifeq ($(DEBUG), 1)
+	@echo "Debug build ."
+else
+	@echo "Release build."
+endif	
+	@echo "Created $(OUT_DIR) directory ."
+#	@echo "\n"
+#	@echo "[ vpath    ] : $(VPATH)"
+#	@echo "[ src list ] : $(TARGET_SRC)"
+#	@echo "[ obj list ] : $(TARGET_OBJ_ALL)"
+	@echo "\n"
+	@echo "Compiling ... "
+	
+$(OUT_DIR)/$(EXECUTABLE_NAME): $(TARGET_OBJ_ALL)
+	@echo "\n"	
+	@echo "linking ... "
 	$(CC)  $^ -o $@ 
-	echo "---------build done ----------"
+	@echo "build done "
 	
 	
-$(BUILD_DIR)/%.o : %.c
+$(OUT_DIR)/%.o : %.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@	
 	
 clean:
-	rm -rf $(BUILD_DIR)/*.o
+	@rm -rf $(BUILD_DIR)
+	@echo "deleted $(BUILD_DIR) directory."
+
 	
 
 		
