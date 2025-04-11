@@ -1,10 +1,6 @@
 SRC_DIR = src
 INCLUDE_DIR = inc
-
 EXECUTABLE_NAME=make_template 
-
-
-
 
 CC=gcc 
 CXX=g++
@@ -33,6 +29,7 @@ VPATH = $(sort $(dir $(SRC)))
 TARGET_SRC = $(notdir $(SRC))
 TARGET_OBJ = $(TARGET_SRC:%.c=$(BUILD_DIR)/%.o)
 
+
 all: $(BUILD_DIR) $(BUILD_DIR)/$(EXECUTABLE_NAME)
 
 $(BUILD_DIR):
@@ -45,8 +42,6 @@ $(BUILD_DIR)/$(EXECUTABLE_NAME): $(TARGET_OBJ)
 	$(CC)  $^ -o $@ 
 	echo "---------build done ----------"
 	
-create_dir:
-	mkdir -p build
 	
 $(BUILD_DIR)/%.o : %.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@	
