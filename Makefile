@@ -5,7 +5,7 @@ BUILD_DIR := build
 
 CC=gcc 
 CXX=g++
-CFLAGS = -Wall -Wextra -Wpedantic 
+CFLAGS = -Wall -Wpedantic # -Wunused-variable #-Wextra  -Wuninitialized 
 CXXFLAGS = -Wall -Wextra -Wpedantic --std=c++17
 CPPFLAGS = -I$(INCLUDE_DIR) 
 LDFLAGS = -lmath 
@@ -15,12 +15,13 @@ DEBUG = 1
 ifeq ($(DEBUG), 1)
   OUT_DIR := $(addsuffix /debug,$(BUILD_DIR))
   CFLAGS +=-g -o0 
-  CXXFLAGS += -o3 
+  CXXFLAGS += -g -o0  
 else
   OUT_DIR := $(addsuffix /release,$(BUILD_DIR))
   CFLAGS += -o3 
   CXXFLAGS += -o3 
 endif
+
 
 SRC = $(wildcard  $(SRC_DIR)/*.c   $(SRC_DIR)/*/*.c   $(SRC_DIR)/*/*/*.c   $(SRC_DIR)/*/*/*/*.c)
 #OBJECTS = $(patsubst %.c,%.o,$(SRC))
@@ -34,6 +35,7 @@ TARGET_OBJ_ALL = $(TARGET_SRC:%.c=$(OUT_DIR)/%.o)
 all : $(OUT_DIR) build
 
 build : $(OUT_DIR)/$(EXECUTABLE_NAME)
+
 
 $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
@@ -54,16 +56,75 @@ $(OUT_DIR)/$(EXECUTABLE_NAME): $(TARGET_OBJ_ALL)
 	@echo "\n"	
 	@echo "linking ... "
 	$(CC)  $^ -o $@ 
-	@echo "build done "
-	
-	
+	@echo "\n"
+	@echo "build successful. "
+
+		
 $(OUT_DIR)/%.o : %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@	
-	
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@	
+		
 clean:
 	@rm -rf $(BUILD_DIR)
-	@echo "deleted $(BUILD_DIR) directory."
+	@echo "deleted $(BUILD_DIR) directory.clean ok ."
+	@echo "clean ok ."
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 		
