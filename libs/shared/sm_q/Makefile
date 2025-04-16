@@ -1,27 +1,16 @@
-DEBUG ?= 1
+DEBUG ?= 0
+EXECUTABLE_NAME=libsmq.so
 
-EXECUTABLE_NAME=make_template 
+SRC_DIR = src
+INCLUDE_DIR = inc
+BUILD_DIR := build 
 
-ROOT_DIR := .
-BUILD_DIR := $(ROOT_DIR)/build 
-SRC_DIR := $(ROOT_DIR)/src
-INCLUDE_DIR = $(ROOT_DIR)/inc
-
-BUILD_TIMESTAMP = $(shell date +'%d-%m-%y.%H-%M-%S.%N')
-
-DEFINES = -DBUILD-TIMESTAMP_STR=\"$(BUILD_TIMESTAMP)\" \
-	  -DDEBUG_NEXT=ASDF
-
-WARNS = -Wall -Wextra -Werror -Wwrite-strings -Wno-parentheses -pedantic \
-       -Warray-bounds -Wno-unused-variable -Wno-unused-function -Wno-unused-parameter -Wno-unused-result
-
-INC_PATHS := -I$(INCLUDE_DIR)       	
-
+CC=gcc 
 CXX=g++
-CC=gcc       
-CFLAGS = $(INC_PATHS) $(WARNS)   #-Wall -Wpedantic # -Wunused-variable #-Wextra  -Wuninitialized 
-CXXFLAGS = $(INC_PATHS) -Wall -Wextra -Wpedantic --std=c++17
-#LDFLAGS = -lsmq -L.  
+CFLAGS = -fPIC -Wall -Wpedantic # -Wunused-variable #-Wextra  -Wuninitialized 
+CXXFLAGS = -Wall -Wextra -Wpedantic --std=c++17
+CPPFLAGS = -I$(INCLUDE_DIR) 
+LDFLAGS =  
 
 
 ifeq ($(DEBUG), 1)
@@ -35,9 +24,7 @@ else
 endif
 
 
-SRC = $(wildcard  $(SRC_DIR)/*.c   $(SRC_DIR)/*/*.c   $(SRC_DIR)/*/*/*.c   $(SRC_DIR)/*/*/*/*.c)
-#OBJECTS = $(patsubst %.c,%.o,$(SRC))
-#OBJECTS = $(patsubst %.c, out/%.o,$(SRC))
+SRC = $(wildcard  $(SRC_DIR)/*.c   $(SRC_DIR)/*/*.c)
 VPATH = $(sort $(dir $(SRC)))
 
 TARGET_SRC = $(notdir $(SRC))
@@ -67,7 +54,7 @@ endif
 $(OUT_DIR)/$(EXECUTABLE_NAME): $(TARGET_OBJ_ALL)
 	@echo "\n"	
 	@echo "linking ... "
-	$(CC)  $^ -o $@  $(LDFLAGS) 
+	$(CC) -shared $^ -o $@  $(LDFLAGS)
 	@echo "\n"
 	@echo "build successful. "
 

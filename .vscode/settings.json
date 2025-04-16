@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "pr_demo.h": "c",
+        "stdio.h": "c"
+    }
+}
